@@ -15,6 +15,7 @@ function PZ({ pvt_data }) {
   const plot_data = useRef([]);
   const calc_data = useRef([]);
   const GIIP = useRef();
+  const colorArr = ['#1983d5', '#09a731', '#ab0ea0'];
   
 
   calc_data.current = [pvt_data.test1, pvt_data.test2, pvt_data.test3];
@@ -22,7 +23,7 @@ function PZ({ pvt_data }) {
   plot_data.current = [];
 
   //p/z calculations
-  calc_data.current.forEach((value) => {
+  calc_data.current.forEach((value, index) => {
     if(value.valid){
         let pz_data = [];
     let prod_data = [];
@@ -33,7 +34,7 @@ function PZ({ pvt_data }) {
     pz_data.sort((a,b)=>b-a);
     prod_data.sort((a,b)=>a-b);
     const randL = Math.floor(Math.random()*3);
-    const randG = Math.floor(Math.random()*3)+2;
+    const randG = Math.floor(Math.random()*2)+3;
     const m = (pz_data[randG] - pz_data[randL])/(prod_data[randG] - prod_data[randL]);
     let tempX = 0;
     let tempY = pz_data[0];
@@ -53,10 +54,9 @@ function PZ({ pvt_data }) {
       }
     }
     
-    console.log(prod_data)
-    console.log(pz_data)
-    console.log(m);
-
+    // console.log(prod_data)
+    // console.log(pz_data)
+    // console.log(m);
     
     plot_data.current.push(
         {
@@ -65,11 +65,14 @@ function PZ({ pvt_data }) {
             type: "scatter",
             mode: "lines+markers",
             marker: { color: "#000" },
-            line: { color: "black" },
+            line: { color: colorArr[index] },
+            name: `Test_${index+1}: GIIP: ${GIIP.current} MMMSCF`,
+            showlegend: true
           }
-    ) 
+    );
     }
   });
+
 
   useEffect(() => {}, [pvt_data]);
   return (
@@ -78,14 +81,14 @@ function PZ({ pvt_data }) {
         style={{ height: "95%" }}
         data={plot_data.current}
         layout={{
-          width: 700,
+          width: 900,
           title: { text: "P/Z Plot (PET 516 GROUP 4)" },
           autosize: true,
           paper_bgcolor: "#f46060",
           plot_bgcolor: "#de8c8c",
           xaxis: {
             title: {
-              text: "Cummulative Gas Production (MMSCF)," + ` GIIP = ${GIIP.current} MMSCF`,
+              text: "Cummulative Gas Production (MMMSCF)",
               font: { color: "#000" },
             },
             tickfont: { color: "#000" },

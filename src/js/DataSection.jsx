@@ -73,7 +73,9 @@ function DataSection({ id, type, pvt_data, setPvtData }) {
   const productionRef = useRef({});
 
   const gatherData = () => {
-    setPvtData(prev=>({...prev, [type]: {
+    setPvtData((prev) => ({
+      ...prev,
+      [type]: {
         pressure: [
           pressureRef.current.p1.value,
           pressureRef.current.p2.value,
@@ -96,8 +98,36 @@ function DataSection({ id, type, pvt_data, setPvtData }) {
           productionRef.current.p5.value,
         ],
         valid: true,
-      }}));
-      
+      },
+    }));
+  };
+
+  const clearData = () => {
+    pressureRef.current.p1.value = "";
+    pressureRef.current.p2.value = "";
+    pressureRef.current.p3.value = "";
+    pressureRef.current.p4.value = "";
+    pressureRef.current.p5.value = "";
+    zRef.current.z1.value = "";
+    zRef.current.z2.value = "";
+    zRef.current.z3.value = "";
+    zRef.current.z4.value = "";
+    zRef.current.z5.value = "";
+    productionRef.current.p1.value = "";
+    productionRef.current.p2.value = "";
+    productionRef.current.p3.value = "";
+    productionRef.current.p4.value = "";
+    productionRef.current.p5.value = "";
+
+    setPvtData((prev) => ({
+      ...prev,
+      [type]: {
+        pressure: [],
+        zfactor: [],
+        production: [],
+        valid: false,
+      },
+    }));
   };
 
   useEffect(() => {}, []);
@@ -107,7 +137,7 @@ function DataSection({ id, type, pvt_data, setPvtData }) {
       <Header>
         <Text>Test {id}</Text>
         <ButtonSection>
-          <Button>
+          <Button onClick={() => clearData()}>
             <span>Clear Field</span> <RiDeleteBin5Line />
           </Button>
           <Button
